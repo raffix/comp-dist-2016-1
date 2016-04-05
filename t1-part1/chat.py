@@ -1,12 +1,22 @@
-from bottle import run, get, post, view, request, redirect
+from bottle import run, get, post, view, request, redirect, route
+import json
+import requests
+import sys
 
-messages = [("Nobody", "Hello!")]
-nick = "Nobody"
+sys.path.append('../t1-part2/')
+from request import *
+from peers import *
 
-@get('/')
+ID = 0
+peers = []
+porta = 8080
+
+
+@get('/<name>')
 @view('index')
-def index():
-    return {'messages': messages, 'nick': nick}
+@route('/<name>')
+def index(name = 'Nobody'):
+	return {'nick' : name,'message': mensagens }
 
 
 @post('/send')
@@ -16,7 +26,8 @@ def sendMessage():
     n = request.forms.get('nick')
     messages.append([n, m])
     nick = n
-    redirect('/')
+    redirect('/'+n) 	
 
 
-run(host='localhost', port=8080)
+
+run(host='localhost', port=(porta + ID))
