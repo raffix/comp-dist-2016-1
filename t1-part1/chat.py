@@ -11,6 +11,9 @@ ID = 0
 peers = []
 porta = 8080
 
+mensagens = []
+nick = []
+
 
 @get('/<name>')
 @view('index')
@@ -26,7 +29,8 @@ def sendMessage():
     n = request.forms.get('nick')
     messages.append([n, m])
     nick = n
-    redirect('/'+n) 	
+    redirect('/'+n) 
+
 
 
 
