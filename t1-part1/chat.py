@@ -1,25 +1,21 @@
-from bottle import run, get, post, view, request, redirect, route
-import json
-import requests
+from bottle import run, get, post, view, request, redirect, route, static_file
 import sys
+import threading
+import json
 
 sys.path.append('../t1-part2/')
 from request import *
 from peers import *
 
-ID = 0
-peers = []
-porta = 8080
-
-mensagens = []
-nick = []
+messages = [("Nobody", "Hello!")]
+nick = "Nobody"
 
 
+@route('/<name>')
 @get('/<name>')
 @view('index')
-@route('/<name>')
-def index(name = 'Nobody'):
-	return {'nick' : name,'message': mensagens }
+def index(nick):
+    return {'messages': messages, 'nick': nick }
 
 
 @post('/send')
@@ -29,9 +25,11 @@ def sendMessage():
     n = request.forms.get('nick')
     messages.append([n, m])
     nick = n
-    redirect('/'+n) 
+    redirect('/')
+
+@get('/synchronize/<url>')
+def searchPeers():
 
 
 
-
-run(host='localhost', port=(porta + ID))
+run(host='localhost', port=8080)
